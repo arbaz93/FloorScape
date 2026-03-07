@@ -1,6 +1,7 @@
 import { useOutletContext} from "react-router";
 import { Box } from "lucide-react";
 import Button from "./ui/Button";
+import { APP_INFO } from "../lib/app-info";
 
 export default function Navbar() {
     const { isSignedIn, userName, signIn, signOut } = useOutletContext<AuthContext>()
@@ -32,8 +33,8 @@ export default function Navbar() {
                     <div className="brand">
                         <Box className="logo" />
 
-                        <span className="name">
-                            Roomify
+                        <span className="name capitalize">
+                            {APP_INFO.title}
                         </span>
                     </div>
 
