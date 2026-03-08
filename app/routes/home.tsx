@@ -1,17 +1,28 @@
 import type { Route } from "./+types/home";
 import Navbar from "../../components/Navbar"
-import {APP_INFO} from "../../lib/app-info";
+import {APP_INFO} from "../../lib/constants";
 import {ArrowRight, ArrowUpRight, Clock, Layers} from "lucide-react";
 import Button from "../../components/ui/Button";
+import Upload from "../../components/Upload";
+import {useNavigate} from "react-router";
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "New React Router App" },
-    { name: "description", content: "Welcome to React Router!" },
+    { title: APP_INFO.title },
+    { name: "description", content: "Welcome Floorscape where you can convert 2d floor plans into 3d renders using AI!" },
   ];
 }
 
 export default function Home() {
+  const navigate = useNavigate();
+
+  const handleUploadComplete = async  (base64Image:string) => {
+      const uniqueID = Date.now().toString();
+
+      navigate(`/visualizer/${uniqueID}`)
+
+      return true
+  }
   return (
       <div className="home">
         <Navbar />
@@ -50,7 +61,7 @@ export default function Home() {
                         <p>Supports JPG, PNG, formats upto 10MB</p>
                     </div>
 
-                    <p>Upload Images</p>
+                    <Upload onComplete={handleUploadComplete}/>
                 </div>
 
             </div>
