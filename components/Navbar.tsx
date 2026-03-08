@@ -1,7 +1,7 @@
 import { useOutletContext} from "react-router";
 import { Box } from "lucide-react";
 import Button from "./ui/Button";
-import { APP_INFO } from "../lib/app-info";
+import { APP_INFO } from "../lib/constants";
 
 export default function Navbar() {
     const { isSignedIn, userName, signIn, signOut } = useOutletContext<AuthContext>()
