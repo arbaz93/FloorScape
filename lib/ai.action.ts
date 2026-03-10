@@ -36,7 +36,7 @@ export const generate3DView = async ({ sourceImage }:Generate3DViewParams) => {
         model: "gemini-2.5-flash-image-preview",
         input_image: base64Data,
         input_image_mime_type: mimeType,
-        ratio: { w: 512, h: 512}
+        ratio: { w: 1024, h: 1024}
     }
 
     const response = await puter.ai.txt2img(FLOORSCAPE_RENDER_PROMPT, geminiOptions);
