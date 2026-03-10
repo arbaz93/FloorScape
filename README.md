@@ -70,7 +70,7 @@ The codebase includes both:
 
 ```bash
 git clone <your-repo-url>
-cd roomify
+cd directory
 npm install
 ```
 
