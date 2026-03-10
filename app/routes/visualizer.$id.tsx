@@ -5,6 +5,7 @@ import {Box, Download, RefreshCcw, Share2, X} from "lucide-react";
 import {APP_INFO} from "../../lib/constants";
 import Button from "../../components/ui/Button";
 import {createProject, getProjectById} from "../../lib/puter.action";
+import {ReactCompareSlider, ReactCompareSliderImage} from "react-compare-slider";
 
 const VisualizerId = () => {
     const { id } = useParams();
@@ -20,6 +21,35 @@ const VisualizerId = () => {
     const [currentImage, setCurrentImage] = useState<string | null>(null)
 
     const handleBack = () => navigate("/");
+
+    const handleExport = async () => {
+        if (!currentImage) return;
+
+        const filename = `${project?.name || `floorscape-${id || "render"}`}.png`;
+
+        try {
+            const response = await fetch(currentImage);
+            const blob = await response.blob();
+            const objectUrl = URL.createObjectURL(blob);
+
+            const link = document.createElement("a");
+            link.href = objectUrl;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+
+            URL.revokeObjectURL(objectUrl);
+        } catch (error) {
+            const link = document.createElement("a");
+            link.href = currentImage;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            console.error(error);
+        }
+    };
 
     const runGeneration = async (item:DesignItem) => {
         if(!id || !item?.sourceImage) return;
@@ -127,7 +157,7 @@ const VisualizerId = () => {
                         <div className="panel-actions">
                             <Button
                                 size="sm"
-                                onClick={() => {}}
+                                onClick={handleExport}
                                 className="export"
                                 disabled={!currentImage}
                             >
@@ -160,6 +190,33 @@ const VisualizerId = () => {
                                     <span className="title">Rendering ...</span>
                                     <span className="subtitle">Generating your 3D visualization</span>
                                 </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+
+                <div className="panel compare">
+                    <div className="panel-header">
+                        <div className="panel-meta">
+                            <p>Comparison</p>
+                            <h3>Before and After</h3>
+                        </div>
+                        <div className="hint">Drag to compare</div>
+                    </div>
+
+                    <div className="compare-stage">
+                        {project?.sourceImage && currentImage ? (
+                            <ReactCompareSlider
+                                defaultValue={50}
+                                style={{ width: "100%", height: "auto" }}
+                                itemOne={<ReactCompareSliderImage src={project.sourceImage} alt="before" className="compare-img" />}
+                                itemTwo={<ReactCompareSliderImage src={currentImage || project?.renderedImage} alt="after" className="compare-img" />}
+                            />
+                        ): (
+                            <div className="compare-fallback">
+                                {project?.sourceImage && (
+                                    <img src={project.sourceImage} alt="before" className="compare-img"/>
+                                )}
                             </div>
                         )}
                     </div>
