@@ -12,6 +12,7 @@ const VisualizerId = () => {
     const navigate = useNavigate();
     const { userId } = useOutletContext<AuthContext>()
 
+    const compareImgStyle = {width: "100%", height: "auto", objectFit: "contain"}
     const hasInitialGenerated = useRef(false)
 
     const [isProcessing, setIsProcessing] = useState<boolean>(false);
@@ -209,8 +210,8 @@ const VisualizerId = () => {
                             <ReactCompareSlider
                                 defaultValue={50}
                                 style={{ width: "100%", height: "auto" }}
-                                itemOne={<ReactCompareSliderImage src={project.sourceImage} alt="before" className="compare-img" />}
-                                itemTwo={<ReactCompareSliderImage src={currentImage || project?.renderedImage} alt="after" className="compare-img" />}
+                                itemOne={<ReactCompareSliderImage src={project.sourceImage} alt="before" className="compare-img" style={compareImgStyle} />}
+                                itemTwo={<ReactCompareSliderImage src={currentImage || project?.renderedImage} alt="after" className="compare-img" style={compareImgStyle} />}
                             />
                         ): (
                             <div className="compare-fallback">

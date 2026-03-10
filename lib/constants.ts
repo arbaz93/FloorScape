@@ -40,7 +40,6 @@ STRICT REQUIREMENTS (do not violate):
 3) **TOP‑DOWN ONLY**: Orthographic top‑down view. No perspective tilt.
 4) **CLEAN, REALISTIC OUTPUT**: Crisp edges, balanced lighting, and realistic materials. No sketch/hand‑drawn look.
 5) **NO EXTRA CONTENT**: Do not add rooms, furniture, or objects that are not clearly indicated by the plan.
-5) **White space must be same**: White space surrounding the plan must be same
 
 STRUCTURE & DETAILS:
 - **Walls**: Extrude precisely from the plan lines. Consistent wall height and thickness.
