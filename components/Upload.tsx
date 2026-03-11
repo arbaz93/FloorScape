@@ -2,6 +2,7 @@ import React, {useCallback, useEffect, useRef, useState} from 'react'
 import {useOutletContext} from "react-router";
 import {CheckCircle2, ImageIcon, UploadIcon} from "lucide-react";
 import {PROGRESS_INCREMENT, REDIRECT_DELAY_MS, PROGRESS_INTERVAL_MS} from "../lib/constants";
+import {convertImageFileTo1024Square} from "../lib/utils";
 
 interface UploadProps {
     onComplete?: (base64Data: string) => void;
@@ -29,8 +30,8 @@ const Upload = ({ onComplete }: UploadProps) => {
         };
     }, []);
 
-    const processFile = useCallback((file: File) => {
-        if (!isSignedIn) return;
+    const processFile = useCallback((file: File | undefined | null) => {
+        if (!isSignedIn || !file) return;
 
         setFile(file);
         setProgress(0);
@@ -87,12 +88,14 @@ const Upload = ({ onComplete }: UploadProps) => {
         }
     };
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (!isSignedIn) return;
 
         const selectedFile = e.target.files?.[0];
+        const resizedImage = await convertImageFileTo1024Square(selectedFile);
+
         if (selectedFile) {
-            processFile(selectedFile);
+            processFile(resizedImage);
         }
     };
 
