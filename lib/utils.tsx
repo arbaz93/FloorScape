@@ -263,6 +263,11 @@ export const convertImageFileTo1024Square = async (
         const ctx = canvas.getContext("2d");
         if (!ctx) return image;
 
+        // Fill the padded area with white so transparent pixels don't become black
+        // when models ignore the alpha channel.
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, TARGET_SIZE, TARGET_SIZE);
+
         // Center the scaled image in the square canvas
         const offsetX = (TARGET_SIZE - Math.round(width)) / 2;
         const offsetY = (TARGET_SIZE - Math.round(height)) / 2;
