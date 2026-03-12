@@ -77,7 +77,7 @@ The codebase includes both:
 
 ```bash
 git clone <your-repo-url>
-cd directory
+cd FloorScape
 npm install
 ```
 
