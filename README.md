@@ -2,6 +2,8 @@
 
 Floorscape is an AI-assisted architectural visualization app that converts uploaded 2D floor plans into rendered top-down 3D interiors. The frontend is built with React Router 7, React 19, Vite, and Tailwind CSS v4, while authentication, file hosting, AI image generation, and project persistence are handled through Puter services.
 
+**Live demo:** https://floorscape.netlify.app/
+
 ## Project Overview
 
 The application is designed around a simple workflow:
@@ -16,6 +18,11 @@ The codebase includes both:
 
 - A React Router frontend for the user interface
 - A Puter worker script that exposes project persistence endpoints
+
+## Preview
+
+![Home page upload and projects](preview/preview-01.png)
+![Visualizer before/after comparison](preview/preview-02.png)
 
 ## Features
 
@@ -142,6 +149,10 @@ docker run -p 3000:3000 floorscape
 - `npm run build` builds the React Router app
 - `npm run start` serves the built app from `./build/server/index.js`
 - `npm run typecheck` runs route type generation and TypeScript checks
+
+## Known Issues
+
+- `npm run typecheck` currently fails at `app/routes/visualizer.$id.tsx:213` because `string | null | undefined` is passed to a prop expecting `string | undefined`.
 
 ## Folder Structure
 
