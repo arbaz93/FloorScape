@@ -1,7 +1,7 @@
-import {useNavigate, useOutletContext, useParams} from "react-router";
+import {useLocation, useNavigate, useOutletContext, useParams} from "react-router";
 import {useEffect, useRef, useState} from "react";
 import {generate3DView} from "../../lib/ai.action";
-import {Box, Download, RefreshCcw, Share2, X} from "lucide-react";
+import {Box, Download, LoaderCircle, RefreshCcw, Share2, X} from "lucide-react";
 import {APP_INFO} from "../../lib/constants";
 import Button from "../../components/ui/Button";
 import {createProject, getProjectById} from "../../lib/puter.action";
@@ -10,17 +10,20 @@ import {ReactCompareSlider, ReactCompareSliderImage} from "react-compare-slider"
 const VisualizerId = () => {
     const { id } = useParams();
     const navigate = useNavigate();
-    const { userId } = useOutletContext<AuthContext>()
+    const location = useLocation().state;
+    const payload = location;
+    const { userId, userName } = useOutletContext<AuthContext>()
 
     const hasInitialGenerated = useRef(false)
 
     const [isProcessing, setIsProcessing] = useState<boolean>(false);
     const [isProjectLoading, setIsProjectLoading] = useState(true);
+    const [isSharing, setIsSharing] = useState(false);
 
     const [project, setProject] = useState<DesignItem | null>(null);
     const [currentImage, setCurrentImage] = useState<string | null>(null)
 
-    const handleBack = () => navigate("/");
+    const handleBack = () => navigate((payload?.comingFrom) ? `/${payload.comingFrom}` : "/");
 
     const handleExport = async () => {
         if (!currentImage) return;
@@ -51,6 +54,30 @@ const VisualizerId = () => {
         }
     };
 
+    const handleShare = async () => {
+        if (!project || payload?.comingFrom === "community") return
+        const updatedProject:DesignItem = {
+            ... project,
+            sharedAt: Date.now().toLocaleString(),
+            sharedBy: userName ?? "Anonymous",
+            isPublic: !project?.isPublic
+        }
+        // start sharing animation state
+        setIsSharing(true)
+        // here comes the logic of making the project public
+        try {
+            const response = await createProject({ item: updatedProject, visibility: (!updatedProject.isPublic) ? "private" : "public"});
+            if(response) {
+                setProject(updatedProject)
+            }
+        } catch (e) {
+            console.error("Failed to share the project", e)
+
+        } finally {
+            setIsSharing(false)
+        }
+        // after it is set to public successfully set is public to true
+    }
     const runGeneration = async (item:DesignItem) => {
         if(!id || !item?.sourceImage) return;
         setIsProcessing(true)
@@ -87,6 +114,11 @@ const VisualizerId = () => {
 
 
     useEffect(() => {
+        if(payload?.comingFrom === "community") {
+            setCurrentImage(payload?.renderedImage ?? payload?.sourceImage)
+            setProject(payload);
+            return
+        }
         let isMounted = true;
         const loadProject = async () => {
             if (!id) {
@@ -151,7 +183,7 @@ const VisualizerId = () => {
                         <div className="panel-meta">
                             <p>Project</p>
                             <h2>{project?.name || `Floorscape ${id}`}</h2>
-                            <p className="note">Created by You</p>
+                            <p className="note">Created by {(userId === project?.ownerId) ? "You" : project?.sharedBy}</p>
                         </div>
 
                         <div className="panel-actions">
@@ -165,11 +197,15 @@ const VisualizerId = () => {
                             </Button>
                             <Button
                                 size="sm"
-                                onClick={() => {}}
-                                className="share"
-                                disabled={!currentImage}
+                                onClick={handleShare}
+                                className={`share`}
+                                disabled={!currentImage || isSharing || payload?.comingFrom === "community"}
                             >
-                                <Share2 className="w-4 h-4 mr-2" /> Share
+                                {isSharing
+                                    ? <LoaderCircle className={`w-4 h-4 mr-2 animate-spin`} />
+                                    : <Share2 className={`w-4 h-4 mr-2`} />
+                                }
+                                {!project?.isPublic ? "share" : "unshare"}
                             </Button>
                         </div>
                     </div>
