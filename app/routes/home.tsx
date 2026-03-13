@@ -4,7 +4,7 @@ import {APP_INFO} from "../../lib/constants";
 import {ArrowRight, ArrowUpRight, Clock, Layers} from "lucide-react";
 import Button from "../../components/ui/Button";
 import Upload from "../../components/Upload";
-import {useNavigate} from "react-router";
+import {useNavigate, useOutletContext} from "react-router";
 import {useEffect, useRef, useState} from "react";
 import {createProject, getProjects} from "../../lib/puter.action";
 
@@ -18,6 +18,7 @@ export function meta({}: Route.MetaArgs) {
 export default function Home() {
   const navigate = useNavigate();
   const [projects, setProjects] = useState<DesignItem[]>([]);
+  const { userName } = useOutletContext<AuthContext>()
   const isCreatingProjectRef = useRef(false);
 
   const handleUploadComplete = async  (base64Image:string) => {
@@ -123,7 +124,7 @@ export default function Home() {
                 </div>
 
                 <div className="projects-grid">
-                    {projects.map(({id, name, sourceImage, renderedImage, timestamp}) => (
+                    {projects.map(({id, name, isPublic, sourceImage, renderedImage, timestamp, sharedBy}) => (
                         <div key={id} className="project-card group" onClick={() => navigate(`/visualizer/${id}`)}>
                             <div className="preview">
                                 <img
@@ -132,7 +133,7 @@ export default function Home() {
                                 />
 
                                 <div className="badge">
-                                    <span>community</span>
+                                    <span>{(!isPublic) ? "PRIVATE" : "PUBLIC"}</span>
                                 </div>
                             </div>
 
@@ -142,7 +143,7 @@ export default function Home() {
                                     <div className="meta">
                                         <Clock size={12} />
                                         <span>{new Date(timestamp).toLocaleDateString()}</span>
-                                        <span>By Jason_21</span>
+                                        <span>By {sharedBy ===  userName ? `You` : sharedBy}</span>
                                     </div>
                                 </div>
                                 <div className="arrow">

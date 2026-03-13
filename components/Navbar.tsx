@@ -1,4 +1,4 @@
-import { useOutletContext} from "react-router";
+import {Link, useOutletContext} from "react-router";
 import { Box } from "lucide-react";
 import Button from "./ui/Button";
 import { APP_INFO } from "../lib/constants";
@@ -30,7 +30,7 @@ export default function Navbar() {
             <nav className="inner">
                 <div className="left">
 
-                    <div className="brand">
+                    <div to={'/'} className="brand">
                         <Box className="logo" />
 
                         <span className="name capitalize">
@@ -39,10 +39,10 @@ export default function Navbar() {
                     </div>
 
                     <ul className="links">
-                        <a href="#">Product</a>
-                        <a href="#">Pricing</a>
-                        <a href="#">Community</a>
-                        <a href="#">Enterprise</a>
+                        <a href="/">Home</a>
+                        {/*<a href="#">Pricing</a>*/}
+                        <a href="/community">Community</a>
+                        {/*<a href="#">Enterprise</a>*/}
                     </ul>
 
                 </div>
