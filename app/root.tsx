@@ -11,6 +11,7 @@ import type { Route } from "./+types/root";
 import "./app.css";
 import {useEffect, useState} from "react";
 import { signIn as puterSignIn, signOut as puterSignOut, getCurrentUser} from "../lib/puter.action";
+import Notification from "../components/Notification";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -25,7 +26,73 @@ export const links: Route.LinksFunction = () => [
   },
 ];
 
+
 export function Layout({ children }: { children: React.ReactNode }) {
+  const [notifications, setNotification] = useState<NotificationState[] | []>([])
+
+  const removeNotification = (id:string | number)=> {
+    if(!id) return;
+
+    setNotification((prev) => prev.filter(notification => notification.id !== id))
+  }
+  useEffect(() => {
+    const originalConsoleError =  console.error;
+    const originalConsoleWarn =  console.warn;
+
+    console.error = (...args: unknown[]) => {
+      for (const arg of args) {
+        if (arg instanceof Error) {
+          console.log("Error message:", arg);
+        }
+      }
+
+      console.log("All args:", args);
+
+      const message = args.find((a) => a instanceof Error || typeof a === "string");
+      setNotification((prev) => [
+        ...prev,
+        {
+          id: Date.now().toString(36) + Math.random().toString(36).substring(2),
+          message: message instanceof Error
+              ? message.message
+              : args?.[0]?.message ?? message ?? "something went wrong",
+          type: "error",
+        },
+      ]);
+
+      originalConsoleError.apply(console, args as []);
+    };
+
+    console.warn = (...args: unknown[]) => {
+      for (const arg of args) {
+        if (arg instanceof Error) {
+          console.log("Error message:", arg);
+        }
+      }
+
+      console.log("All args:", args);
+
+      const message = args.find((a) => a instanceof Error || typeof a === "string");
+      setNotification((prev) => [
+        ...prev,
+        {
+          id: Date.now(),
+          message: message instanceof Error ? message.message : String(message ?? "error"),
+          type: "warn",
+        },
+      ]);
+
+      originalConsoleWarn.apply(console, args as []);
+    };
+
+    return () => {
+      console.error = originalConsoleError;
+      console.warn = originalConsoleWarn;
+    };
+
+  }, []);
+
+
   return (
     <html lang="en">
       <head>
@@ -35,6 +102,20 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
+        <div className="fixed top-4 right-4 z-50 flex flex-col gap-1.5">
+      {notifications.map((n) => (
+          <Notification
+              key={n.id}
+              id={n.id}
+              message={n.message}
+              type={n.type}
+              time={n.time}
+              callback={removeNotification}
+          />
+      ))}
+        </div>
+
+
         {children}
         <ScrollRestoration />
         <Scripts />

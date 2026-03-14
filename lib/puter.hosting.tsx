@@ -1,4 +1,4 @@
-import puter from "@heyputer/puter.js";
+import puter from"@heyputer/puter.js";
 import {
     createHostingSlug,
     fetchBlobFromUrl, getHostedUrl,

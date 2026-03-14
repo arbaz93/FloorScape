@@ -93,6 +93,14 @@ type AuthContext = {
     signIn: () => Promise<boolean>;
     signOut: () => Promise<boolean>;
 };
+type NotificationType = "process" | "warn" | "error";
+
+type NotificationState = {
+    id: string | number;
+    message: string;
+    type?: NotificationType;
+    time?: number;
+};
 
 type AuthRequiredModalProps = {
     isOpen: boolean;

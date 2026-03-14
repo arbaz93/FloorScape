@@ -10,7 +10,8 @@ const signOut = () => puter.auth.signOut();
 const getCurrentUser = async () => {
     try {
         return await puter.auth.getUser();
-    } catch {
+    } catch(e) {
+        console.error(e)
         return null
     }
 }
@@ -92,7 +93,6 @@ const getProjects = async () => {
 
     try {
         const response = await puter.workers.exec(`${PUTER_WORKER_URL}/api/projects/list`, { method: "GET" });
-        console.log("get projects", response)
         if(!response.ok) {
             console.error("Failed to fetch projects", await response.text());
             return []

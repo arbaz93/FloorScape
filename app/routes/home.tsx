@@ -60,6 +60,7 @@ export default function Home() {
   }
 
     useEffect(() => {
+        if(!userName) return
         const fetchProjects = async () => {
             const items = await getProjects();
 
@@ -68,7 +69,7 @@ export default function Home() {
         }
 
         void fetchProjects()
-    }, []);
+    }, [userName]);
 
   return (
       <div className="home">
