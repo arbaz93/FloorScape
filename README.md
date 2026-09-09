@@ -21,8 +21,8 @@ The codebase includes both:
 
 ## Preview
 
-![Home page upload and projects](preview/preview-01.png)
-![Visualizer before/after comparison](preview/preview-02.png)
+![Home page upload and projects](./preview/preview-01.png)
+![Visualizer before/after comparison](./preview/preview-02.png)
 
 ## Features
 
