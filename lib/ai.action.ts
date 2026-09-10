@@ -24,26 +24,29 @@ export const generate3DView = async ({ sourceImage }:Generate3DViewParams) => {
         ? sourceImage
         : await fetchAsDataUrl(sourceImage);
 
-    const base64Data = dataUrl.split(",")[1];
-    const mimeType = dataUrl.split(";")[0].split(":")[1];
+    const base64Data = dataUrl.includes(",") ? dataUrl.split(",")[1] : dataUrl;
+    const mimeType = dataUrl.match(/^data:(image\/[^;]+);/i)?.[1] ?? "image/png";
 
-    if(!mimeType || !base64Data) {
+    if (!base64Data) {
         throw new Error("failed to fetch image payload ...")
     }
 
     const geminiOptions = {
-        provider: "gemini",
+        prompt: FLOORSCAPE_RENDER_PROMPT,
         model: "gemini-2.5-flash-image-preview",
         input_image: base64Data,
         input_image_mime_type: mimeType,
-        ratio: { w: 1024, h: 1024}
-    }
+        ratio: { w: 1024, h: 1024 },
+    };
 
-    const response = await puter.ai.txt2img(FLOORSCAPE_RENDER_PROMPT, geminiOptions);
+    const response = await puter.ai.txt2img(geminiOptions);
 
-    const renderedImageUrl = (response as HTMLImageElement).src ?? null;
+    const renderedImageUrl =
+        (typeof response === "object" && response && "src" in response && typeof response.src === "string")
+            ? response.src
+            : null;
 
-    if(!renderedImageUrl) return { renderedImage: null, renderedPath: undefined }
+    if (!renderedImageUrl) return { renderedImage: null, renderedPath: undefined }
 
     const renderedImage = renderedImageUrl.startsWith("data:")
         ? renderedImageUrl

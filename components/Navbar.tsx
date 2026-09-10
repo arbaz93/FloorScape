@@ -30,13 +30,13 @@ export default function Navbar() {
             <nav className="inner">
                 <div className="left">
 
-                    <div to={'/'} className="brand">
+                    <Link to="/" className="brand">
                         <Box className="logo" />
 
                         <span className="name capitalize">
                             {APP_INFO.title}
                         </span>
-                    </div>
+                    </Link>
 
                     <ul className="links">
                         <a href="/">Home</a>

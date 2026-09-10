@@ -172,7 +172,7 @@ export const fitWithinMaxDimension = (
 export const resizeImageFileToMax = async (
     image: File | undefined,
     max: number,
-): Promise<File> => {
+): Promise<File | undefined> => {
     if (!image || max <= 0 || typeof window === "undefined") return image;
     if (!image.type.startsWith("image/")) return image;
 
