@@ -318,6 +318,3 @@ npm run typecheck
 git commit -m "Improve visualizer render handling"
 ```
 
-## License
-
-No license file was detected in this repository at the time of writing. If you intend to distribute or open-source the project, add a license file such as `LICENSE` and update this section accordingly.
