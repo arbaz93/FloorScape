@@ -21,7 +21,7 @@ The codebase includes both:
 
 ## Preview
 
-![Home page upload and projects](https://i.postimg.cc/L6Hgqkqb/preview-01.jpg)
+![Home page upload and projects](https://i.postimg.cc/nzhmGTXd/Floorscape.png)
 ![Visualizer before/after comparison](https://i.postimg.cc/TYR5yjyB/preview-02.jpg)
 
 ## Features
