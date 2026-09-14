@@ -396,7 +396,7 @@
         }
 
         .compare-stage {
-          @apply relative overflow-hidden bg-slate-50;
+          @apply relative aspect-square overflow-hidden bg-slate-50;
         }
 
         .compare-fallback {
@@ -404,7 +404,7 @@
         }
 
         .compare-img {
-          @apply h-auto w-full object-contain;
+          @apply block h-full w-full object-contain;
         }
       }
     }

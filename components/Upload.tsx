@@ -75,7 +75,7 @@ const Upload = ({ onComplete }: UploadProps) => {
         setIsDragging(false);
     };
 
-    const handleDrop = (e: React.DragEvent) => {
+    const handleDrop = async (e: React.DragEvent) => {
         e.preventDefault();
         setIsDragging(false);
 
@@ -84,7 +84,8 @@ const Upload = ({ onComplete }: UploadProps) => {
         const droppedFile = e.dataTransfer.files[0];
         const allowedTypes = ['image/jpeg', 'image/png'];
         if (droppedFile && allowedTypes.includes(droppedFile.type)) {
-            processFile(droppedFile);
+            const resizedImage = await convertImageFileTo1024Square(droppedFile);
+            processFile(resizedImage);
         }
     };
 

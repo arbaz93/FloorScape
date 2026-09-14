@@ -244,21 +244,21 @@ const VisualizerId = () => {
                         {project?.sourceImage && currentImage ? (
                             <ReactCompareSlider
                                 defaultValue={50}
-                                style={{ width: "100%" }}
+                                style={{ width: "100%", aspectRatio: "1 / 1" }}
                                 itemOne={
                                     <ReactCompareSliderImage
                                         src={project.sourceImage}
                                         alt="before"
                                         className="compare-img"
-                                        style={{ width: "100%", height: "auto", objectFit: "contain" }}
+                                        style={{ width: "100%", height: "100%", objectFit: "contain" }}
                                     />
                                 }
                                 itemTwo={
                                     <ReactCompareSliderImage
-                                        src={currentImage || project?.renderedImage}
+                                        src={currentImage || project?.renderedImage || undefined}
                                         alt="after"
                                         className="compare-img"
-                                        style={{ width: "100%", height: "auto", objectFit: "contain" }}
+                                        style={{ width: "100%", height: "100%", objectFit: "contain" }}
                                     />
                                 }
                             />
