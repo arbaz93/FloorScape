@@ -239,6 +239,9 @@ const VisualizerId = () => {
                         </div>
                         <div className="hint">Drag to compare</div>
                     </div>
+                    <p className="compare-note">
+                        Images share the same canvas, but AI-generated details may shift slightly.
+                    </p>
 
                     <div className="compare-stage">
                         {project?.sourceImage && currentImage ? (

@@ -395,6 +395,10 @@
           }
         }
 
+        .compare-note {
+          @apply mt-2 text-xs text-slate-500;
+        }
+
         .compare-stage {
           @apply relative aspect-square overflow-hidden bg-slate-50;
         }
