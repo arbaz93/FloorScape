@@ -1,7 +1,7 @@
 import {useLocation, useNavigate, useOutletContext, useParams} from "react-router";
 import {useEffect, useRef, useState} from "react";
 import {generate3DView} from "../../lib/ai.action";
-import {Box, Download, LoaderCircle, RefreshCcw, Share2, X} from "lucide-react";
+import {Box, Download, Info, LoaderCircle, RefreshCcw, Share2, X} from "lucide-react";
 import {APP_INFO} from "../../lib/constants";
 import Button from "../../components/ui/Button";
 import {createProject, getProjectById} from "../../lib/puter.action";
@@ -239,9 +239,12 @@ const VisualizerId = () => {
                         </div>
                         <div className="hint">Drag to compare</div>
                     </div>
-                    <p className="compare-note">
-                        Images share the same canvas, but AI-generated details may shift slightly.
-                    </p>
+                    <div className="compare-note">
+                        <Info aria-hidden="true" size={15} />
+                        <p>
+                            <strong>Best results:</strong> use a square 1024 x 1024 image. AI-generated details may shift slightly.
+                        </p>
+                    </div>
 
                     <div className="compare-stage">
                         {project?.sourceImage && currentImage ? (
